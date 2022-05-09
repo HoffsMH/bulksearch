@@ -23,7 +23,7 @@ var rootCmd = &cobra.Command{
 		for scanner.Scan() {
 			terms = append(terms, scanner.Text())
 		}
-		results := bulksearch.Search(terms, args[0])
+		results := bulksearch.Search(terms, args)
 		for _,v := range results {
 			fmt.Println(v.Term, ",", v.FileCount)
 		}

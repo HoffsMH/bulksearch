@@ -14,15 +14,24 @@ var readFile = func(filename string) (string, error) {
 }
 
 var getAbs = filepath.Abs
+
 type Result struct {
-	Term string
+	Term      string
 	FileCount int
 }
 
-func Search(searchTerms []string, dir string) []Result {
+func Search(searchTerms []string, dirs []string) []Result {
 	results := []Result{}
 	for _, term := range searchTerms {
-		results = append(results, Result{Term: term, FileCount: SearchFor(term, dir)})
+		result := Result{Term: term, FileCount: 0}
+		for _, subTerm := range strings.Split(term, " ") {
+			for _, dir := range dirs {
+				if len(subTerm) > 0 {
+					result.FileCount += SearchFor(subTerm, dir)
+				}
+			}
+		}
+		results = append(results, result)
 	}
 
 	sort.Slice(results, func(i, j int) bool {
